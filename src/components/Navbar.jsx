@@ -36,7 +36,7 @@ const NavbarContainer = styled.div`
    justify-content: space-between;
    align-items: center;
    padding: 10px;
-   background-color: #004d40;
+   background-color: #105d45;
    color: white;
 `;
 
@@ -106,11 +106,11 @@ const BackButton1 = styled.button`
    left: 75%;
 `;
 const BackButton2 = styled.button`
-   background-color: green;
+   background-color: #105d45;
    color: white;
    border-radius: 10px;
    position: absolute;
-   padding: 2px 18px;
+   padding: 3px 18px;
    top: 17%;
    left: 82%;
 `;

@@ -24,12 +24,13 @@ import {
 import { RxCross1 } from "react-icons/rx";
 import { IoMdCheckmark } from "react-icons/io";
 
+
 export const Home = () => {
    const products = useSelector((state) => state.rootReducer.products);
    const dispatch = useDispatch();
    const [selectedProductId, setSelectedProductId] = useState(null);
    const [isDialogOpen, setIsDialogOpen] = useState(false);
-   const url = "http://localhost:8080";
+   const url = process.env.REACT_APP_URL;
    const [editedProduct, setEditedProduct] = useState({
       price: "",
       qty: "",
@@ -40,7 +41,10 @@ export const Home = () => {
          "https://media.istockphoto.com/id/94929126/photo/avocados-isolated-on-white.jpg?s=612x612&w=0&k=20&c=c0BSuWnUTAkZyj-cYHKzR5dXtZWQ1_3PXcea3M92Z4I=",
    });
    const [isEditing, setIsEditing] = useState(false);
-   console.log("process", url);
+   console.log("process", process.env);   
+   console.log(" Variable:", process.env.REACT_APP_URL);
+
+
 
    useEffect(() => {
       dispatch(fetchProducts());

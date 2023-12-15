@@ -12,7 +12,7 @@ export const updateProductStatus = (productId, status) => {
    return async (dispatch) => {
       try {
          const response = await axios.patch(
-            `http://localhost:8080/products/${productId}`,
+            `${process.env.REACT_APP_URL}/products/${productId}`,
             { status }
          );
          dispatch({
@@ -41,7 +41,7 @@ export const editProductFailure = (error) => ({
 
 export const fetchProducts = () => async (dispatch) => {
    try {
-      const response = await fetch(`http://localhost:8080/products`);
+      const response = await fetch(`${process.env.REACT_APP_URL}/products`);
 
       if (!response.ok) {
          throw new Error("Failed to fetch products");
