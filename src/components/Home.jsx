@@ -23,7 +23,7 @@ import {
 } from "@chakra-ui/react";
 import { RxCross1 } from "react-icons/rx";
 import { IoMdCheckmark } from "react-icons/io";
-
+import Swal from 'sweetalert2'
 
 export const Home = () => {
    const products = useSelector((state) => state.rootReducer.products);
@@ -57,8 +57,7 @@ export const Home = () => {
    };
 
    const fillInfo = (selectedProductId) => {
-      // console.log("edited")
-      // console.log("selectedProductId",selectedProductId)
+  
       const selectedProduct = products.find(
          (product) => product.id == selectedProductId
       );
@@ -84,6 +83,13 @@ export const Home = () => {
 
    // Dialog box------------------------------------------------->>>
    const handleYesClick = (productId) => {
+      Swal.fire({
+         position: "top-mid",
+         icon: "success",
+         title: "Product has Approved",
+         showConfirmButton: false,
+         timer: 1500
+       });
       const status = "Approved";
       console.log(status, "statusss");
       setSelectedProductId(productId);
@@ -143,9 +149,13 @@ export const Home = () => {
 
             dispatch(fetchProducts());
          } else {
-            alert(
-               "Please enter valid price and quantity (both should be >= 0)."
-            );
+            Swal.fire({
+               icon: "error",
+               title: "Oops...",
+               text: "Please enter valid price and quantity (both should be >= 0).",
+               // footer: '<a href="#">Why do I have this issue?</a>'
+             });
+            
          }
       } catch (error) {
          dispatch(editProductFailure(error.message));
