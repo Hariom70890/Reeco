@@ -18,13 +18,15 @@ import {
    Button,
    FormControl,
    FormLabel,
-   Input, Spinner,
+   Input,
+   Spinner,
    Select,
 } from "@chakra-ui/react";
 import { RxCross1 } from "react-icons/rx";
 import { IoMdCheckmark } from "react-icons/io";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 import { HashLoader } from "react-spinners";
+import { type } from "@testing-library/user-event/dist/type";
 
 export const Home = () => {
    const products = useSelector((state) => state.rootReducer.products);
@@ -43,10 +45,8 @@ export const Home = () => {
          "https://media.istockphoto.com/id/94929126/photo/avocados-isolated-on-white.jpg?s=612x612&w=0&k=20&c=c0BSuWnUTAkZyj-cYHKzR5dXtZWQ1_3PXcea3M92Z4I=",
    });
    const [isEditing, setIsEditing] = useState(false);
-   console.log("process", process.env);   
+   console.log("process", process.env);
    console.log(" Variable:", process.env.REACT_APP_URL);
-
-
 
    useEffect(() => {
       dispatch(fetchProducts());
@@ -59,7 +59,6 @@ export const Home = () => {
    };
 
    const fillInfo = (selectedProductId) => {
-  
       const selectedProduct = products.find(
          (product) => product.id == selectedProductId
       );
@@ -84,17 +83,33 @@ export const Home = () => {
    };
 
    // Dialog box------------------------------------------------->>>
-   const handleYesClick = (productId) => {
-      Swal.fire({
-         position: "top-mid",
-         icon: "success",
-         title: "Product has Approved",
-         showConfirmButton: false,
-         timer: 1500
-       });
-      const status = "Approved";
-      console.log(status, "statusss");
-      setSelectedProductId(productId);
+   const handleYesClick = async (productId) => {
+      setSelectedProductId((prevId) => {
+         // Use the previous value to update
+         const newId = productId;
+         Swal.fire({
+            position: "top-mid",
+            icon: "success",
+            title: "Product has Approved",
+            showConfirmButton: false,
+            timer: 1500,
+         });
+
+         const status = "Approved";
+         console.log(status, "statusss");
+
+         // Use the newId here
+         dispatch(updateProductStatus(newId, status));
+
+         return newId;
+      });
+
+      setIsDialogOpen(false);
+   };
+
+   const handleDialogConfirm = (isUrgent) => {
+      const status = isUrgent ? "Missing - Urgent" : "Missing";
+      console.log(status, "statusss", selectedProductId);
       dispatch(updateProductStatus(selectedProductId, status));
       setIsDialogOpen(false);
    };
@@ -108,19 +123,13 @@ export const Home = () => {
       setIsDialogOpen(false);
    };
 
-   const handleDialogConfirm = (isUrgent) => {
-      const status = isUrgent ? "Missing - Urgent" : "Missing";
-      console.log(status, "statusss", selectedProductId);
-      dispatch(updateProductStatus(selectedProductId, status));
-      setIsDialogOpen(false);
-   };
    // Dialog box----------------------------------->>>
 
    const handleEditSubmit = async () => {
       try {
          if (editedProduct.price >= 0 && editedProduct.qty >= 0) {
             const updatedData = {
-               status: "ProductUpdated",
+               status: "",
                price: editedProduct.price,
                qty: editedProduct.qty,
                reason: editedProduct.reason,
@@ -156,8 +165,7 @@ export const Home = () => {
                title: "Oops...",
                text: "Please enter valid price and quantity (both should be >= 0).",
                // footer: '<a href="#">Why do I have this issue?</a>'
-             });
-            
+            });
          }
       } catch (error) {
          dispatch(editProductFailure(error.message));
@@ -178,12 +186,9 @@ export const Home = () => {
 
    return (
       <>
-        {isLoading && (
-            // Loading spinner while fetching data
+         {isLoading && (
             <LoadingOverlay>
-               {/* <Spinner size="xl" color="blue.500" /> */}
                <HashLoader color="#105d45" />
-             
             </LoadingOverlay>
          )}
          <ThirdDiv>
@@ -199,9 +204,10 @@ export const Home = () => {
                <HeadingDiv>Total</HeadingDiv>
                <TextHead>
                   ₹{" "}
-                  {products.map((ele) => {
-                     return +ele.qty * +ele.price;
-                  })}
+                  {products.reduce((total, product) => {
+                     console.log(typeof product.qty);
+                     return total + +product.qty * +product.price;
+                  }, 0)}
                </TextHead>
             </ParentDiv>
             <ParentDiv>
@@ -235,11 +241,11 @@ export const Home = () => {
             <tbody>
                {products?.map((product) => (
                   <tr key={product.id}>
-                     <TableTd>
+                     <TableTd style={{padding:"15px", textAlign:"center", fontWeight:"bold"}}>
                         <img
                            src={product.img_url}
                            alt={product.name}
-                           style={{ width: "50px", height: "50px" }}
+                           style={{ width: "50px", height: "50px", padding:"5PX" }}
                         />
                         {product.name}
                      </TableTd>
@@ -424,6 +430,8 @@ const TableTh = styled.th`
 const TableTd = styled.td`
    /* border: 2px solid red; */
    border-bottom: 1px solid #ddd;
+  text-align: center; /* Adjust text alignment as needed */
+
 `;
 
 const Tabledata = styled.tr`
@@ -436,7 +444,7 @@ const Tabledata = styled.tr`
             case "missing - urgent":
                return "red";
             default:
-               return "yellow";
+               return "white";
          }
       }
       return "transparent";
@@ -444,7 +452,6 @@ const Tabledata = styled.tr`
 `;
 
 const TextForStatus = styled.p`
-   /* border: 1px solid red; */
    border-radius: 10px;
    padding: 5px 10px;
 `;

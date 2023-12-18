@@ -42,6 +42,7 @@ const NavbarContainer = styled.div`
 
 const NavbarLinks = styled.div`
    display: flex;
+   margin-left:20px;
    gap: 20px;
    align-items: center;
 `;
@@ -50,6 +51,7 @@ const CartContainer = styled.div`
    display: flex;
    align-items: center;
    gap: 10px;
+   margin-right:50px;
 `;
 const Logo = styled.a`
    font-family: "Zapf-Chancery", cursive;
@@ -57,6 +59,7 @@ const Logo = styled.a`
 `;
 const NavLink = styled.a`
    color: white;
+   margin:10px 20px ;
    align-items: center;
    text-decoration: none;
    cursor: pointer;
@@ -84,8 +87,7 @@ const InsideDiv = styled.p`
    padding-left: 50px;
 `;
 const OderNumber = styled.h1`
-   /* border: 2px solid red; */
-   /* text-decoration: solid; */
+
    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
    font-size: 20px;
    margin-top: 20px;
@@ -102,7 +104,7 @@ const BackButton1 = styled.button`
    border-radius: 10px;
    position: absolute;
    padding: 2px 18px;
-   top: 17%;
+   top: 12%;
    left: 75%;
 `;
 const BackButton2 = styled.button`
@@ -111,6 +113,6 @@ const BackButton2 = styled.button`
    border-radius: 10px;
    position: absolute;
    padding: 3px 18px;
-   top: 17%;
+   top: 12%;
    left: 82%;
 `;
