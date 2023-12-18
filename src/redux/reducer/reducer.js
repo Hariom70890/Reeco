@@ -5,11 +5,14 @@ import {
    FETCH_PRODUCTS_SUCCESS,
    UPDATE_PRODUCT,
    UPDATE_PRODUCT_STATUS,
+   START_LOADING,
+   STOP_LOADING,
 } from "../actionTypes/actionTypes";
 
 const initialState = {
    products: [],
    error: null,
+   isLoading: false, // Added isLoading state
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -43,10 +46,16 @@ const rootReducer = (state = initialState, action) => {
          return { ...state, products: updatedProducts };
 
       case FETCH_PRODUCTS_SUCCESS:
-         return { ...state, products: action.payload, error: null };
+         return { ...state, products: action.payload, error: null, isLoading: false };
 
       case FETCH_PRODUCTS_FAILURE:
-         return { ...state, products: [], error: action.payload };
+         return { ...state, products: [], error: action.payload, isLoading: false };
+
+      case START_LOADING:
+         return { ...state, isLoading: true };
+
+      case STOP_LOADING:
+         return { ...state, isLoading: false };
 
       default:
          return state;

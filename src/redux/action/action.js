@@ -6,6 +6,8 @@ import {
    FETCH_PRODUCTS_SUCCESS,
    UPDATE_PRODUCT,
    UPDATE_PRODUCT_STATUS,
+   START_LOADING,
+   STOP_LOADING,
 } from "../actionTypes/actionTypes";
 
 export const updateProductStatus = (productId, status) => {
@@ -41,6 +43,9 @@ export const editProductFailure = (error) => ({
 
 export const fetchProducts = () => async (dispatch) => {
    try {
+      // Dispatch START_LOADING action to set loading to true
+      dispatch({ type: START_LOADING });
+
       const response = await fetch(`${process.env.REACT_APP_URL}/products`);
 
       if (!response.ok) {
@@ -48,9 +53,11 @@ export const fetchProducts = () => async (dispatch) => {
       }
 
       const data = await response.json();
-      // console.log(data,"datain Action")
       dispatch({ type: FETCH_PRODUCTS_SUCCESS, payload: data });
    } catch (error) {
       dispatch({ type: FETCH_PRODUCTS_FAILURE, payload: error.message });
+   } finally {
+      // Dispatch STOP_LOADING action regardless of success or failure
+      dispatch({ type: STOP_LOADING });
    }
 };

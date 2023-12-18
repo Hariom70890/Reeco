@@ -18,15 +18,17 @@ import {
    Button,
    FormControl,
    FormLabel,
-   Input,
+   Input, Spinner,
    Select,
 } from "@chakra-ui/react";
 import { RxCross1 } from "react-icons/rx";
 import { IoMdCheckmark } from "react-icons/io";
 import Swal from 'sweetalert2'
+import { HashLoader } from "react-spinners";
 
 export const Home = () => {
    const products = useSelector((state) => state.rootReducer.products);
+   const isLoading = useSelector((state) => state.rootReducer.isLoading);
    const dispatch = useDispatch();
    const [selectedProductId, setSelectedProductId] = useState(null);
    const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -176,6 +178,14 @@ export const Home = () => {
 
    return (
       <>
+        {isLoading && (
+            // Loading spinner while fetching data
+            <LoadingOverlay>
+               {/* <Spinner size="xl" color="blue.500" /> */}
+               <HashLoader color="#105d45" />
+             
+            </LoadingOverlay>
+         )}
          <ThirdDiv>
             <ParentDiv>
                <HeadingDiv>Supplier</HeadingDiv>
@@ -384,6 +394,19 @@ const DIV = styled.table`
    margin: auto;
    border: 1px solid grey;
    margin-top: 20px;
+`;
+
+const LoadingOverlay = styled.div`
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background: rgba(255, 255, 255, 0.8);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   z-index: 1000;
 `;
 
 const TableHead = styled.thead`
